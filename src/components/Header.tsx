@@ -43,50 +43,59 @@ export default function App() {
     >
       <NavbarContent className="hidden md:flex">
         <NavbarBrand>
-          <p className="font-bold text-inherit">LaptopZone</p>
+          <p className="font-semibold text-green-600 text-lg">Laptop Zone</p>
         </NavbarBrand>
       </NavbarContent>
 
-      <NavbarContent justify="end" className="md:flex hidden">
-        <Button isIconOnly variant="light">
-          <BsBookmark size={20} />
-        </Button>
-        <Button isIconOnly variant="light">
-          <BsCart2 size={20} />
-        </Button>
-      </NavbarContent>
-
-      <NavbarContent justify="end" className="gap-1 w-full">
+      <NavbarContent justify="end" className="gap-1 md:gap-4">
         <Input
           classNames={{
-            base: "max-w-full sm:max-w-[10rem] h-10",
-            mainWrapper: "h-full",
-            input: "text-small",
+            input: "text-small w-full",
             inputWrapper:
-              "h-full font-normal text-default-500 bg-default-400/20 dark:bg-default-500/20",
+              "h-full w-full font-normal text-default-500 bg-default-400/20 dark:bg-default-500/20",
           }}
           placeholder="Search In LaptopZone..."
           size="sm"
           startContent={<RiSearch2Line size={18} />}
           type="search"
         />
-        <Badge content="10" shape="circle" color="primary">
-          <Button isIconOnly variant="light">
+        <Badge content="10" shape="circle" color="danger">
+          <Button isIconOnly variant="light" className="text-gray-600">
             <BsBookmark size={20} />
           </Button>
         </Badge>
-        <Badge content="10" shape="circle" color="primary">
-          <Button isIconOnly variant="light">
+        <Badge content="10" shape="circle" color="danger">
+          <Button isIconOnly variant="light" className="text-gray-600">
             <BsCart2 size={20} />
           </Button>
         </Badge>
-        <Button
-          isIconOnly
-          variant="light"
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-        >
-          <AiOutlineMenu size={20} />
-        </Button>
+        <span>|</span>
+        <NavbarItem className="hidden md:flex gap-4">
+          <Button
+            className="text-green-600 font-medium"
+            variant="bordered"
+            color="success"
+          >
+            <p>Login</p>
+          </Button>
+          <Button
+            className="text-white font-medium"
+            variant="solid"
+            color="success"
+          >
+            <p>Sign Up</p>
+          </Button>
+        </NavbarItem>
+        <NavbarItem>
+          <Button
+            className="md:hidden flex"
+            isIconOnly
+            variant="light"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+          >
+            <AiOutlineMenu size={20} />
+          </Button>
+        </NavbarItem>
       </NavbarContent>
     </Navbar>
   );
