@@ -11,6 +11,7 @@ import {
   NavbarMenuItem,
   Input,
   Badge,
+  Divider,
 } from "@nextui-org/react";
 import { AiOutlineMenu } from "react-icons/ai";
 import { BsCart2, BsBookmark } from "react-icons/bs";
@@ -59,17 +60,18 @@ export default function App() {
           startContent={<RiSearch2Line size={18} />}
           type="search"
         />
+        <Divider orientation="vertical" />
         <Badge content="10" shape="circle" color="danger">
-          <Button isIconOnly variant="light" className="text-gray-600">
+          <Button isIconOnly variant="flat" className="text-gray-600">
             <BsBookmark size={20} />
           </Button>
         </Badge>
         <Badge content="10" shape="circle" color="danger">
-          <Button isIconOnly variant="light" className="text-gray-600">
+          <Button isIconOnly variant="flat" className="text-gray-600">
             <BsCart2 size={20} />
           </Button>
         </Badge>
-        <span>|</span>
+        <Divider orientation="vertical" />
         <NavbarItem className="hidden md:flex gap-4">
           <Button
             className="text-green-600 font-medium"
