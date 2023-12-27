@@ -2,6 +2,14 @@ import { prisma } from "@/lib/prisma/client";
 import { TypeUserSignUp } from "@/types/backend/auth/user";
 import validator from "validator";
 
+export function responseFailed(message: string) {
+  return {
+    status: "failed",
+    statusCode: 400,
+    message: message,
+  };
+}
+
 export function checkData(data: TypeUserSignUp) {
   // validasi name
   let validateName: boolean = validator.isLength(data.name, { min: 5 });
@@ -54,9 +62,30 @@ export function checkData(data: TypeUserSignUp) {
 export async function checkUsername(userName: string) {
   try {
     const user = await prisma.user.findFirst({ where: { userName } });
-    return user;
-  } catch (error) {
-    console.log(error);
+    if (user) {
+      const err = new Error("Username already registered");
+      throw err;
+    }
+
+    return { message: "Success" };
+  } catch (error: any) {
+    return { message: error.message };
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
+export async function checkEmail(email: string) {
+  try {
+    const user = await prisma.user.findFirst({ where: { email } });
+    if (user) {
+      const err = new Error("Email already registered");
+      throw err;
+    }
+
+    return { message: "Success" };
+  } catch (error: any) {
+    return { message: error.message };
   } finally {
     await prisma.$disconnect();
   }
