@@ -90,3 +90,25 @@ export async function checkEmail(email: string) {
     await prisma.$disconnect();
   }
 }
+
+export async function addNewUser(dataUser: TypeUserSignUp) {
+  try {
+    const response = await prisma.user.create({
+      data: {
+        name: dataUser.name,
+        userName: dataUser.userName,
+        email: dataUser.email,
+        password: dataUser.password,
+        address: dataUser.address,
+        picture: dataUser.picture,
+        telp: dataUser.telp,
+      },
+    });
+
+    return { status: "success", response, message: "success add new user" };
+  } catch (error) {
+    return { status: "failed", message:  "Something when wrong!" };
+  } finally {
+    await prisma.$disconnect();
+  }
+}

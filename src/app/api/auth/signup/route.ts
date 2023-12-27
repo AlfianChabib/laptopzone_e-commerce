@@ -1,9 +1,11 @@
 import {
+  addNewUser,
   checkData,
   checkEmail,
   checkUsername,
   responseFailed,
 } from "@/lib/controller/auth/signup";
+import { encryptPass } from "@/lib/controller/password";
 import { TypeUserSignUp } from "@/types/backend/auth/user";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -31,5 +33,37 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(response);
   }
 
-  return NextResponse.json("ok");
+  const encrypt = await encryptPass(data.password);
+  if (encrypt.status === "failed") {
+    const response = responseFailed(encrypt.message);
+    return NextResponse.json(response);
+  }
+
+  const dataUser: TypeUserSignUp = {
+    name: data.name,
+    userName: data.userName,
+    email: data.email,
+    password: encrypt.password,
+    address: data.address,
+    picture: data.picture,
+    telp: data.telp,
+    products: "",
+    carts: "",
+    wishlists: "",
+    transactions: "",
+    seller: "",
+  };
+
+  const responseFinal = await addNewUser(dataUser);
+  if (responseFinal.status == "failed") {
+    const res = responseFailed(responseFinal.message);
+    return NextResponse.json(res);
+  }
+
+  return NextResponse.json({
+    status: "success",
+    statusCode: 200,
+    message: "Success add new User",
+    data: responseFinal.response,
+  });
 }

@@ -11,7 +11,9 @@
   "dependencies": {
     "@nextui-org/react": "^2.2.9",
     "@prisma/client": "^5.7.1",
+    "@types/bcrypt": "^5.0.2",
     "@types/validator": "^13.11.7",
+    "bcrypt": "^5.1.1",
     "framer-motion": "^10.16.16",
     "next": "14.0.4",
     "react": "^18",
