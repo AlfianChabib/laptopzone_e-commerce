@@ -1,4 +1,4 @@
-import { checkData } from "@/lib/controller/auth/signup";
+import { checkData, checkUsername } from "@/lib/controller/auth/signup";
 import { TypeUserSignUp } from "@/types/backend/auth/user";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -14,5 +14,14 @@ export async function POST(req: NextRequest) {
       message: response.message,
     });
 
-  return NextResponse.json({ response });
+  const isUsernameRegister = await checkUsername(data.userName);
+  if (isUsernameRegister) {
+    return NextResponse.json({
+      status: "failed",
+      statusCode: 400,
+      message: "Username already registered",
+    });
+  }
+
+  return NextResponse.json("ok");
 }

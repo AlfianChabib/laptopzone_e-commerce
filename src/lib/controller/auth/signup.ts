@@ -1,3 +1,4 @@
+import { prisma } from "@/lib/prisma/client";
 import { TypeUserSignUp } from "@/types/backend/auth/user";
 import validator from "validator";
 
@@ -48,4 +49,15 @@ export function checkData(data: TypeUserSignUp) {
   }
 
   return { message: "Success" };
+}
+
+export async function checkUsername(userName: string) {
+  try {
+    const user = await prisma.user.findFirst({ where: { userName } });
+    return user;
+  } catch (error) {
+    console.log(error);
+  } finally {
+    await prisma.$disconnect();
+  }
 }
