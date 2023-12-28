@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma/client";
-import { TypeUserSignUp } from "@/types/backend/auth/user";
+import { TypeUserLogin, TypeUserSignUp } from "@/types/backend/auth/user";
 import validator from "validator";
 
 export function responseFailed(message: string) {
@@ -9,7 +9,6 @@ export function responseFailed(message: string) {
     message: message,
   };
 }
-
 export function checkData(data: TypeUserSignUp) {
   // validasi name
   let validateName: boolean = validator.isLength(data.name, { min: 5 });
@@ -107,7 +106,7 @@ export async function addNewUser(dataUser: TypeUserSignUp) {
 
     return { status: "success", response, message: "success add new user" };
   } catch (error) {
-    return { status: "failed", message:  "Something when wrong!" };
+    return { status: "failed", message: "Something when wrong!" };
   } finally {
     await prisma.$disconnect();
   }

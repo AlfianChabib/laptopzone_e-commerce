@@ -12,3 +12,8 @@ export interface TypeUserSignUp {
   transactions?: string[] | "";
   seller?: string[] | "";
 }
+
+export interface TypeUserLogin {
+  email: string;
+  password: string;
+}

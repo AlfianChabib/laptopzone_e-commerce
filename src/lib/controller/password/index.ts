@@ -17,3 +17,19 @@ export async function encryptPass(pass: string) {
     };
   }
 }
+
+export async function comparePass(password: string, hashPass: string) {
+  try {
+    const isPassCorrect = await bcrypt.compare(password, hashPass);
+    if (!isPassCorrect) {
+      return { status: "failed", message: "Wrong password" };
+    }
+
+    return { status: "success", message: "Correct Password" };
+  } catch (error) {
+    return {
+      status: "failed",
+      message: error || "failed when compare password",
+    };
+  }
+}
