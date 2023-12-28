@@ -16,9 +16,12 @@ import {
 import { AiOutlineMenu } from "react-icons/ai";
 import { BsCart2, BsBookmark } from "react-icons/bs";
 import { RiSearch2Line } from "react-icons/ri";
+import { usePathname } from "next/navigation";
 
 export default function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const pathname = usePathname();
+  console.log(pathname);
 
   const menuItems = [
     "Profile",
@@ -32,6 +35,10 @@ export default function App() {
     "Help & Feedback",
     "Log Out",
   ];
+
+  if (pathname === "/auth/login" || pathname === "/auth/signup") {
+    return null;
+  }
 
   return (
     <Navbar
@@ -74,6 +81,8 @@ export default function App() {
         <Divider orientation="vertical" />
         <NavbarItem className="hidden md:flex gap-4">
           <Button
+            as={Link}
+            href="/auth/login"
             className="text-green-600 font-medium"
             variant="bordered"
             color="success"
@@ -81,6 +90,8 @@ export default function App() {
             <p>Login</p>
           </Button>
           <Button
+            as={Link}
+            href="/auth/signup"
             className="text-white font-medium"
             variant="solid"
             color="success"
