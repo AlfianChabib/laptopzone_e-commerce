@@ -33,7 +33,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <main className="max-w-7xl mx-auto">{children}</main>
+          <main className="max-w-7xl mx-auto px-2">{children}</main>
         </ThemeProvider>
       </body>
     </html>
