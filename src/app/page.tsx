@@ -1,7 +1,10 @@
+import Navbar from "@/components/main-nav";
+
 export default function Home() {
   return (
     <section>
-      <h1>hello</h1>
+      <Navbar />
+      <h1>Hello Shadcn</h1>
     </section>
   );
 }
