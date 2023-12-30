@@ -12,30 +12,44 @@ import { Input } from "./ui/input";
 import { Separator } from "./ui/separator";
 import { Badge } from "./ui/badge";
 import { Bookmark, ShoppingCart } from "lucide-react";
+import { SlidersHorizontal } from "lucide-react";
 import Link from "next/link";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+} from "./ui/dropdown-menu";
 
 export default function Navbar() {
   return (
     <nav className="flex items-center justify-between w-full py-4 gap-2">
-      <div>
+      <div className="md:flex hidden">
         <h1 className="text-lg">LaptopZone</h1>
       </div>
       <NavigationMenu>
         <NavigationMenuList>
-          <NavigationMenuItem>
-            <NavigationMenuTrigger>Filter</NavigationMenuTrigger>
-            <NavigationMenuContent>
-              <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
-                <li className="row-span-3">
-                  <Button>Button</Button>
-                </li>
-              </ul>
-            </NavigationMenuContent>
-          </NavigationMenuItem>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline">
+                <SlidersHorizontal />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56">
+              <DropdownMenuLabel>Filter By</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>Name</DropdownMenuItem>
+              <DropdownMenuItem>Price</DropdownMenuItem>
+              <DropdownMenuItem>Brand</DropdownMenuItem>
+              <DropdownMenuItem>Recent Update</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </NavigationMenuList>
       </NavigationMenu>
       <Input
-        placeholder="Search"
+        placeholder="Search in LaptopZone"
         type="search"
         className="focus-visible:ring-1 focus-visible:ring-offset-0 focus-visible:ring-slate-700"
       />
@@ -60,17 +74,19 @@ export default function Navbar() {
           </NavigationMenuItem>
         </NavigationMenuList>
       </NavigationMenu>
-      <Separator orientation="vertical" className="h-7" decorative />
-      <NavigationMenu>
-        <NavigationMenuList className="gap-1">
-          <Link href="/auth/sign-in">
-            <Button variant={"outline"}>Sign In</Button>
-          </Link>
-          <Link href="/auth/sign-up">
-            <Button>Sign Up</Button>
-          </Link>
-        </NavigationMenuList>
-      </NavigationMenu>
+      <div className="md:flex hidden items-center ">
+        <Separator orientation="vertical" className="h-7" decorative />
+        <NavigationMenu>
+          <NavigationMenuList className="gap-1">
+            <Link href="/auth/sign-in">
+              <Button variant={"outline"}>Sign In</Button>
+            </Link>
+            <Link href="/auth/sign-up">
+              <Button>Sign Up</Button>
+            </Link>
+          </NavigationMenuList>
+        </NavigationMenu>
+      </div>
     </nav>
   );
 }
