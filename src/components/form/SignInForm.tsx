@@ -12,6 +12,8 @@ import {
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { fetchPost } from "@/lib/fetch/user";
+import { useState } from "react";
 
 const formSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email." }),
@@ -21,6 +23,7 @@ const formSchema = z.object({
 });
 
 export default function SignInForm() {
+  const [errorMsg, setErrorMsg] = useState<string>("");
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -29,8 +32,18 @@ export default function SignInForm() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    try {
+      const response = await fetchPost(values, "login");
+      if (response.status === "failed") {
+        setErrorMsg(response.message);
+        return;
+      }
+
+      console.log("login success");
+    } catch (error: any) {
+      setErrorMsg(error.message);
+    }
   }
 
   return (

@@ -12,6 +12,9 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { TypeUserSignUp } from "@/types/backend/auth/user";
+import { fetchPost } from "@/lib/fetch/user";
+import { useState } from "react";
 
 const formSchema = z.object({
   name: z.string().min(6, {
@@ -27,6 +30,8 @@ const formSchema = z.object({
 });
 
 export default function SignUpForm() {
+  const [errorMsg, setErrorMsg] = useState<string>("");
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -37,8 +42,31 @@ export default function SignUpForm() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    const { name, username, email, password } = values;
+
+    const dataUser: TypeUserSignUp = {
+      name,
+      userName: username,
+      email,
+      password,
+      address: "",
+      telp: "",
+      picture: "",
+    };
+    try {
+      const response = await fetchPost(dataUser, "signup");
+
+      // Fetch udah berhasil, tinggal handle error"nya aja kasi feedback ke user
+      if (response.status === "failed") {
+        setErrorMsg(response.message);
+        return;
+      }
+
+      // Handle setelah user berhasil login
+    } catch (error: any) {
+      setErrorMsg(error.message);
+    }
   }
 
   return (

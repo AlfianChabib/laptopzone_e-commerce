@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma/client";
-import { TypeUserLogin, TypeUserSignUp } from "@/types/backend/auth/user";
+import { TypeUserSignUp } from "@/types/backend/auth/user";
 import validator from "validator";
 
 export function responseFailed(message: string) {
