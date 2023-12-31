@@ -63,7 +63,8 @@ export default function SignUpForm() {
         return;
       }
 
-      // Handle setelah user berhasil login
+      // Handle setelah user berhasil signup
+      console.log("signup berhasil");
     } catch (error: any) {
       setErrorMsg(error.message);
     }
