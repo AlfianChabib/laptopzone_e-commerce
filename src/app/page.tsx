@@ -1,9 +1,6 @@
-import Navbar from "@/components/main-nav";
-
 export default function Home() {
   return (
-    <section>
-      <Navbar />
+    <section className="flex flex-col w-full h-[1000px]">
       <h1>Hello Shadcn</h1>
     </section>
   );

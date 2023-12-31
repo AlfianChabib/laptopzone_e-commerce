@@ -1,19 +1,10 @@
 "use client";
 import React from "react";
 import {
-  NavigationMenuTrigger,
   NavigationMenu,
   NavigationMenuItem,
   NavigationMenuList,
-  NavigationMenuContent,
 } from "./ui/navigation-menu";
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
-import { Separator } from "./ui/separator";
-import { Badge } from "./ui/badge";
-import { Bookmark, ShoppingCart } from "lucide-react";
-import { SlidersHorizontal } from "lucide-react";
-import Link from "next/link";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -22,10 +13,26 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
 } from "./ui/dropdown-menu";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
+import { Separator } from "./ui/separator";
+import { Badge } from "./ui/badge";
+import { Bookmark, ShoppingCart } from "lucide-react";
+import { SlidersHorizontal } from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export default function Navbar() {
+  const pathName = usePathname();
+
+  const authPathName = ["/auth/sign-in", "/auth/sign-up"];
+
+  if (authPathName.includes(pathName)) {
+    return null;
+  }
+
   return (
-    <nav className="flex items-center justify-between w-full py-4 gap-2">
+    <nav className="flex sticky top-0 left-0 z-50 bg-slate-950 backdrop-filter backdrop-blur-sm bg-opacity-30 items-center justify-between w-full py-4 gap-2">
       <div className="md:flex hidden">
         <h1 className="text-lg">LaptopZone</h1>
       </div>
@@ -74,8 +81,9 @@ export default function Navbar() {
           </NavigationMenuItem>
         </NavigationMenuList>
       </NavigationMenu>
+
+      <Separator orientation="vertical" className="h-7" decorative />
       <div className="md:flex hidden items-center ">
-        <Separator orientation="vertical" className="h-7" decorative />
         <NavigationMenu>
           <NavigationMenuList className="gap-1">
             <Link href="/auth/sign-in">
