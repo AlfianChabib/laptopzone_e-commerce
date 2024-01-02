@@ -101,6 +101,7 @@ export async function addNewUser(dataUser: TypeUserSignUp) {
         address: dataUser.address,
         picture: dataUser.picture,
         telp: dataUser.telp,
+        refreshToken: "",
       },
     });
 

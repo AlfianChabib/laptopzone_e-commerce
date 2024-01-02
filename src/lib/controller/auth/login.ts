@@ -1,7 +1,8 @@
 import { prisma } from "@/lib/prisma/client";
-import { TypeUserLogin } from "@/types/backend/auth/user";
+import { FuncLoginUser, TypeUserLogin } from "@/types/backend/auth/user";
 import validator from "validator";
 import { comparePass } from "../password";
+import { DataUser } from "@/types/frontend/auth/user";
 export function checkDataLogin(data: TypeUserLogin) {
   let validateEmail = validator.isEmail(data.email);
   if (!validateEmail) return { message: "Please fill email properly" };
@@ -27,7 +28,7 @@ export function checkDataLogin(data: TypeUserLogin) {
   return { message: "Success" };
 }
 
-export async function LoginUser(data: TypeUserLogin) {
+export async function LoginUser(data: TypeUserLogin): Promise<FuncLoginUser> {
   try {
     const isRegistered = await prisma.user.findFirst({
       where: {
@@ -57,9 +58,9 @@ export async function LoginUser(data: TypeUserLogin) {
         data: {},
       };
     }
-    
+
     return {
-      message: "success login",
+      message: "success",
       data: isRegistered,
       status: "success",
       statusCode: 200,
@@ -70,6 +71,27 @@ export async function LoginUser(data: TypeUserLogin) {
       data: {},
       status: "failed",
       statusCode: 500,
+    };
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
+export async function UpdateUser(id: number | undefined, dataUpdate: DataUser) {
+  try {
+    if (id) {
+      await prisma.user.update({
+        where: { id },
+        data: {
+          ...dataUpdate,
+        },
+      });
+    }
+  } catch (error: any) {
+    return {
+      status: "failed",
+      statusCode: 500,
+      message: "Internal server error!" || error,
     };
   } finally {
     await prisma.$disconnect();

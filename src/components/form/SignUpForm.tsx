@@ -15,6 +15,12 @@ import { Input } from "@/components/ui/input";
 import { TypeUserSignUp } from "@/types/backend/auth/user";
 import { fetchPost } from "@/lib/fetch/user";
 import { useState } from "react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { AlertCircle } from "lucide-react";
+import { AuthResponse } from "@/types/frontend/auth/user";
+import { Spinner } from "@chakra-ui/react";
+import { useRouter } from "next/navigation";
+import { loginStore } from "@/store/auth";
 
 const formSchema = z.object({
   name: z.string().min(6, {
@@ -30,7 +36,10 @@ const formSchema = z.object({
 });
 
 export default function SignUpForm() {
-  const [errorMsg, setErrorMsg] = useState<string>("");
+  const [errorMsg, setErrorMsg] = useState<AuthResponse | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { setUserAcces } = loginStore();
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -43,36 +52,57 @@ export default function SignUpForm() {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    setErrorMsg(null);
+    setIsLoading(true);
     const { name, username, email, password } = values;
-
     const dataUser: TypeUserSignUp = {
       name,
       userName: username,
       email,
       password,
+      refreshToken: "",
       address: "",
       telp: "",
       picture: "",
     };
-    try {
-      const response = await fetchPost(dataUser, "signup");
 
-      // Fetch udah berhasil, tinggal handle error"nya aja kasi feedback ke user
+    try {
+      const response: AuthResponse = await fetchPost(dataUser, "signup");
+
       if (response.status === "failed") {
-        setErrorMsg(response.message);
+        setErrorMsg(response);
+        setIsLoading(false);
         return;
       }
 
-      // Handle setelah user berhasil signup
-      console.log("signup berhasil");
+      setIsLoading(false);
+      setErrorMsg(null);
+      setUserAcces(response.accessToken);
+      router.push("/");
+      form.reset();
     } catch (error: any) {
-      setErrorMsg(error.message);
+      setIsLoading(false);
+      const errorServer = {
+        status: "failed",
+        statusCode: 500,
+        message: "Oops Internal server Error",
+        accessToken: "",
+      };
+      setErrorMsg(errorServer);
     }
   }
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        {errorMsg ? (
+          <Alert variant="destructive">
+            <AlertCircle className="h-4 w-4" />
+            <AlertTitle>Error {errorMsg.statusCode}</AlertTitle>
+            <AlertDescription>{errorMsg.message}</AlertDescription>
+          </Alert>
+        ) : null}
+
         <FormField
           control={form.control}
           name="name"
@@ -125,8 +155,14 @@ export default function SignUpForm() {
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-full">
-          Sign Up
+        <Button
+          type="submit"
+          className={`w-full ${
+            isLoading ? "cursor-not-allowed hover:bg-none" : "cursor-pointer"
+          }`}
+          disabled={isLoading}
+        >
+          {isLoading ? <Spinner size={"xl"} /> : "Sign up"}
         </Button>
       </form>
     </Form>

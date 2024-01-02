@@ -5,6 +5,7 @@ CREATE TABLE "User" (
     "userName" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "email" TEXT NOT NULL,
+    "refreshToken" TEXT NOT NULL,
     "address" TEXT,
     "telp" TEXT,
     "picture" TEXT,

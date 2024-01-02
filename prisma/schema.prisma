@@ -22,6 +22,7 @@ model User {
   userName     String
   password     String
   email        String
+  refreshToken String
   address      String?
   telp         String?
   picture      String?

@@ -14,6 +14,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { fetchPost } from "@/lib/fetch/user";
 import { useState } from "react";
+import { AuthResponse } from "@/types/frontend/auth/user";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { loginStore } from "@/store/auth";
+import { useRouter } from "next/navigation";
+import { AlertCircle } from "lucide-react";
+import { Spinner } from "@chakra-ui/react";
 
 const formSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email." }),
@@ -23,7 +29,10 @@ const formSchema = z.object({
 });
 
 export default function SignInForm() {
-  const [errorMsg, setErrorMsg] = useState<string>("");
+  const [errorMsg, setErrorMsg] = useState<AuthResponse | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { setUserAcces } = loginStore();
+  const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -33,22 +42,43 @@ export default function SignInForm() {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    setIsLoading(true);
     try {
       const response = await fetchPost(values, "login");
+
       if (response.status === "failed") {
-        setErrorMsg(response.message);
+        setIsLoading(false);
+        setErrorMsg(response);
         return;
       }
 
-      console.log("login success");
+      setIsLoading(false);
+      setErrorMsg(null);
+      setUserAcces(response.accessToken);
+      router.push("/");
+      form.reset();
     } catch (error: any) {
-      setErrorMsg(error.message);
+      setIsLoading(false);
+      const errorServer = {
+        status: "failed",
+        statusCode: 500,
+        message: "Oops Internal server Error",
+        accessToken: "",
+      };
+      setErrorMsg(errorServer);
     }
   }
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        {errorMsg ? (
+          <Alert variant="destructive">
+            <AlertCircle className="h-4 w-4" />
+            <AlertTitle>Error {errorMsg.statusCode}</AlertTitle>
+            <AlertDescription>{errorMsg.message}</AlertDescription>
+          </Alert>
+        ) : null}
         <FormField
           control={form.control}
           name="email"
@@ -75,8 +105,14 @@ export default function SignInForm() {
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-full">
-          Sign In
+        <Button
+          type="submit"
+          className={`w-full ${
+            isLoading ? "cursor-not-allowed" : "cursor-pointer"
+          } `}
+          disabled={isLoading}
+        >
+          {isLoading ? <Spinner /> : "Sign In"}
         </Button>
       </form>
     </Form>

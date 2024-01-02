@@ -1,11 +1,9 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
-  NavigationMenuTrigger,
   NavigationMenu,
   NavigationMenuItem,
   NavigationMenuList,
-  NavigationMenuContent,
 } from "./ui/navigation-menu";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
@@ -22,8 +20,26 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
 } from "./ui/dropdown-menu";
+import { loginStore } from "@/store/auth";
+import { useRouter } from "next/navigation";
 
 export default function Navbar() {
+  const { userAccess, setUserAcces } = loginStore();
+  const router = useRouter();
+  const [isLogin, setIsLogin] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (userAccess) {
+      setIsLogin(true);
+    }
+  }, [userAccess]);
+
+  function handleLogOut() {
+    setLoading(true);
+    setUserAcces("");
+    router.push("/auth/sign-in");
+  }
   return (
     <nav className="flex items-center justify-between w-full py-4 gap-2">
       <div className="md:flex hidden">
@@ -76,16 +92,22 @@ export default function Navbar() {
       </NavigationMenu>
       <div className="md:flex hidden items-center ">
         <Separator orientation="vertical" className="h-7" decorative />
-        <NavigationMenu>
-          <NavigationMenuList className="gap-1">
-            <Link href="/auth/sign-in">
-              <Button variant={"outline"}>Sign In</Button>
-            </Link>
-            <Link href="/auth/sign-up">
-              <Button>Sign Up</Button>
-            </Link>
-          </NavigationMenuList>
-        </NavigationMenu>
+        {!isLogin ? (
+          <NavigationMenu>
+            <NavigationMenuList className="gap-1">
+              <Link href="/auth/sign-in">
+                <Button variant={"outline"}>Sign In</Button>
+              </Link>
+              <Link href="/auth/sign-up">
+                <Button>Sign Up</Button>
+              </Link>
+            </NavigationMenuList>
+          </NavigationMenu>
+        ) : (
+          <Button variant={"outline"} onClick={handleLogOut} disabled={loading}>
+            Sign Out
+          </Button>
+        )}
       </div>
     </nav>
   );
