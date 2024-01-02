@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
 import Navbar from "@/components/main-nav";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export const fontSans = FontSans({
   subsets: ["latin"],
@@ -37,6 +38,7 @@ export default function RootLayout({
           <main className="flex flex-col max-w-7xl mx-auto px-2 min-h-screen relative">
             <Navbar />
             {children}
+            <SpeedInsights />
           </main>
         </ThemeProvider>
       </body>
