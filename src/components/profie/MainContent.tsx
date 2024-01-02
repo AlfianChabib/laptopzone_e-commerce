@@ -3,7 +3,7 @@ import { TabsContent } from "../ui/tabs";
 
 export default function MainContent() {
   return (
-    <div className="flex h-full w-full items-center justify-center p-4 border rounded-md">
+    <div className="flex h-full w-full p-4 border rounded-md">
       <TabsContent value="profile">
         <h1 className="text-3xl">Profile</h1>
       </TabsContent>
