@@ -23,8 +23,10 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
 } from "./ui/dropdown-menu";
+import { NavbarProps } from "@/types/frontend/navbar";
 
-export default function Navbar() {
+export default function Navbar(props: NavbarProps) {
+  const { dataUser } = props;
   const router = useRouter();
   const pathName = usePathname();
   const { userAccess, removeUserAccess } = loginStore();
@@ -32,6 +34,8 @@ export default function Navbar() {
   const [isLogin, setIsLogin] = useState<boolean>(false);
 
   const authPathName = ["/auth/sign-in", "/auth/sign-up"];
+
+  console.log(dataUser);
 
   useEffect(() => {
     if (userAccess) setIsLogin(true);

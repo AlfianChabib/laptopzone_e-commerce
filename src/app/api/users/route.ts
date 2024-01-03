@@ -56,6 +56,8 @@ export async function GET(request: NextRequest) {
 
 export async function PUT(req: NextRequest) {
   const body = await req.text();
+  const tokenUser = req.headers.get("Authorization")?.split(" ")[1];
+
   const params = new URL(req.url).searchParams;
   const idParam = params.get("id");
   if (!idParam) {
@@ -68,7 +70,6 @@ export async function PUT(req: NextRequest) {
 
   const id = parseInt(idParam);
   const data: TypeUserPut = JSON.parse(body);
-  const tokenUser = data.token;
   if (!tokenUser) {
     return NextResponse.json({
       status: "failed",
@@ -104,7 +105,7 @@ export async function PUT(req: NextRequest) {
       message: isPhoneNumber.message,
     });
   }
-  
+
   const dataUser = {
     name: data.name,
     userName: data.userName,
