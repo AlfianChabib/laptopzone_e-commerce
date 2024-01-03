@@ -1,21 +1,18 @@
-"use client";
-import Navbar from "@/components/main-nav";
-import { loginStore } from "@/store/auth";
-import { HomePropsType } from "@/types/frontend/page/home";
-import { useEffect, useState } from "react";
+import { cookies } from "next/headers";
+import { decode, JwtPayload } from "jsonwebtoken";
+import { fetchGet } from "@/lib/fetch/user";
 
-export default function Home(props: HomePropsType) {
-  const { userAccess } = loginStore();
-  const [name, setName] = useState<boolean>(false);
+export const getUser = async () => {
+  const user: string | undefined = cookies().get("user_access")?.value;
+  const decoded = decode(user as string);
+  const { id } = decoded as JwtPayload;
+  const response = await fetchGet(id);
+  return response;
+};
 
-  useEffect(() => {
-    if (userAccess) {
-      setName(true);
-    }
-  }, [userAccess]);
-  return (
-    <section className="flex flex-col w-full h-[1000px]">
-      Hallo {name ? "Ariel" : "Tamu"}
-    </section>
-  );
+export default async function Home() {
+  const userSession = await getUser();
+  console.log(userSession);
+
+  return <section className="flex flex-col w-full h-[1000px]"></section>;
 }

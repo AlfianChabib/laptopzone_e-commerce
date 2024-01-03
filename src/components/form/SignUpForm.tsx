@@ -1,8 +1,18 @@
 "use client";
+import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import * as z from "zod";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { TypeUserSignUp } from "@/types/backend/auth/user";
+import { fetchPost } from "@/lib/fetch/user";
+import { CSSProperties, useState } from "react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { AlertCircle } from "lucide-react";
+import { AuthResponse } from "@/types/frontend/auth/user";
+import PropagateLoader from "react-spinners/PropagateLoader";
+import { useRouter } from "next/navigation";
+import { loginStore } from "@/store/auth";
 import {
   Form,
   FormControl,
@@ -11,16 +21,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { TypeUserSignUp } from "@/types/backend/auth/user";
-import { fetchPost } from "@/lib/fetch/user";
-import { useState } from "react";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { AlertCircle } from "lucide-react";
-import { AuthResponse } from "@/types/frontend/auth/user";
-import { Spinner } from "@chakra-ui/react";
-import { useRouter } from "next/navigation";
-import { loginStore } from "@/store/auth";
 
 const formSchema = z.object({
   name: z.string().min(6, {
@@ -50,6 +50,11 @@ export default function SignUpForm() {
       password: "",
     },
   });
+
+  const override: CSSProperties = {
+    display: "block",
+    paddingBottom: "1rem",
+  };
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setErrorMsg(null);
@@ -162,7 +167,16 @@ export default function SignUpForm() {
           }`}
           disabled={isLoading}
         >
-          {isLoading ? <Spinner size={"xl"} /> : "Sign up"}
+          {isLoading ? (
+            <PropagateLoader
+              cssOverride={override}
+              color="rgb(15, 23, 42)"
+              aria-label="Loading Spinner"
+              data-testid="loader"
+            />
+          ) : (
+            "Sign Up"
+          )}
         </Button>
       </form>
     </Form>

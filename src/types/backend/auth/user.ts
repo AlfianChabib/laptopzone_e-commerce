@@ -8,7 +8,7 @@ export interface TypeUserSignUp {
   address: string;
   telp: string;
   picture: string;
-  refreshToken: string;
+  refreshToken?: string;
   products?: string[] | "";
   carts?: string[] | "";
   wishlists?: string[] | "";

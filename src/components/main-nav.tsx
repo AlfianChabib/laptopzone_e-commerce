@@ -1,5 +1,15 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import Link from "next/link";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
+import { Separator } from "./ui/separator";
+import { Badge } from "./ui/badge";
+import { Bookmark, ShoppingCart } from "lucide-react";
+import { SlidersHorizontal } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { loginStore } from "@/store/auth";
+import { useRouter } from "next/navigation";
 import {
   NavigationMenu,
   NavigationMenuItem,
@@ -13,21 +23,11 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
 } from "./ui/dropdown-menu";
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
-import { Separator } from "./ui/separator";
-import { Badge } from "./ui/badge";
-import { Bookmark, ShoppingCart } from "lucide-react";
-import { SlidersHorizontal } from "lucide-react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { loginStore } from "@/store/auth";
-import { useRouter } from "next/navigation";
 
 export default function Navbar() {
+  const router = useRouter();
   const pathName = usePathname();
   const { userAccess, removeUserAccess } = loginStore();
-  const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
   const [isLogin, setIsLogin] = useState<boolean>(false);
 
