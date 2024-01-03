@@ -2,7 +2,7 @@ import { cookies } from "next/headers";
 import { decode, JwtPayload } from "jsonwebtoken";
 import { fetchGet } from "@/lib/fetch/user";
 
-export const getUser = async () => {
+const getUser = async () => {
   const user: string | undefined = cookies().get("user_access")?.value;
   const decoded = decode(user as string);
   const { id } = decoded as JwtPayload;
