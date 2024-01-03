@@ -6,8 +6,6 @@ import {
 import { responseFailed } from "@/lib/controller/auth/signup";
 import { setAccessToken, setRefreshToken } from "@/lib/token";
 import { FuncLoginUser, TypeUserLogin } from "@/types/backend/auth/user";
-import { serialize } from "cookie";
-import { NextApiRequest, NextApiResponse } from "next";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {

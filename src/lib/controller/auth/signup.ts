@@ -9,6 +9,33 @@ export function responseFailed(message: string) {
     message: message,
   };
 }
+
+export function checkEmailUser(email: string) {
+  let validateEmail = validator.isEmail(email);
+  if (!validateEmail) return { message: "Please fill email properly" };
+  else {
+    const userNameEmail = email.split("@")[0];
+    validateEmail = validator.isAlphanumeric(userNameEmail);
+    if (!validateEmail)
+      return { message: "Usernames email cannot have special characters" };
+  }
+
+  return { message: "Success" };
+}
+
+export function checkUsernameUser(username: string) {
+  let validateUserName: boolean = validator.isAlphanumeric(username);
+  if (!validateUserName)
+    return { message: "Usernames cannot have special characters" };
+  else {
+    validateUserName = validator.isLength(username, { min: 6 });
+    if (!validateUserName)
+      return { message: "Minimum of characters username is 6" };
+  }
+
+  return { message: "Success" };
+}
+
 export function checkData(data: TypeUserSignUp) {
   // validasi name
   let validateName: boolean = validator.isLength(data.name, { min: 5 });
@@ -58,6 +85,17 @@ export function checkData(data: TypeUserSignUp) {
   return { message: "Success" };
 }
 
+export function checkPhoneNumber(phoneNumber: string) {
+  if (phoneNumber !== "") {
+    let validateNoTelp = validator.isMobilePhone(phoneNumber, "id-ID");
+
+    if (!validateNoTelp)
+      return { message: "Please fill number telpon properly" };
+  }
+
+  return { message: "Success" };
+}
+
 export async function checkUsername(userName: string) {
   try {
     const user = await prisma.user.findFirst({ where: { userName } });
@@ -85,6 +123,28 @@ export async function checkEmail(email: string) {
     return { message: "Success" };
   } catch (error: any) {
     return { message: error.message };
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
+export async function findOneByUserName(userName: string) {
+  try {
+    const user = await prisma.user.findFirst({ where: { userName } });
+    if (user) {
+      return {
+        status: "failed",
+        message: "Maaf username ini telah digunakan",
+        statusCode: 400,
+      };
+    }
+    return { status: "success", message: "Username change" };
+  } catch (error) {
+    return {
+      status: "failed",
+      message: error || "Something when wrong when find data",
+      statusCode: 500,
+    };
   } finally {
     await prisma.$disconnect();
   }

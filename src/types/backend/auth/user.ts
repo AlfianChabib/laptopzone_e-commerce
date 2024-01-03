@@ -27,3 +27,12 @@ export type FuncLoginUser = {
   statusCode: number;
   data: DataUser;
 };
+
+export type TypeUserPut = {
+  name: string;
+  userName: string;
+  address: string;
+  telp: string;
+  picture: string;
+  token?: string;
+};

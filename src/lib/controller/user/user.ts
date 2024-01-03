@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma/client";
+import { TypeUserPut } from "@/types/backend/auth/user";
 
 export async function getAllUser() {
   try {
@@ -6,6 +7,54 @@ export async function getAllUser() {
     return { status: "success", data: users };
   } catch (error) {
     return { status: "failed", data: [] };
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
+export async function editUserById(data: TypeUserPut, id: number) {
+  try {
+    const { name, userName, address, telp, picture } = data;
+    const user = await prisma.user.update({
+      where: { id },
+      data: {
+        name,
+        userName,
+        address,
+        telp,
+        picture,
+      },
+    });
+
+    if (!user) {
+      return {
+        status: "failed",
+        message: "gaada coi",
+      };
+    }
+
+    return {
+      status: "success",
+      statusCode: 200,
+      message: "Successfully edit data user",
+      data: user,
+    };
+  } catch (error: any) {
+    if (error.name) {
+      return {
+        status: "failed",
+        statusCode: 500,
+        message: "Unregistered Id!",
+        data: {},
+      };
+    }
+    
+    return {
+      status: "failed",
+      statusCode: 500,
+      message: error || "Something when wrong when updating data!",
+      data: {},
+    };
   } finally {
     await prisma.$disconnect();
   }

@@ -13,6 +13,19 @@ export function setAccessToken(payload: ParamToken) {
   return accessToken;
 }
 
+export function getAccessToken(token: string) {
+  try {
+    const decoded = jwt.verify(token, secretToken);
+    return { status: "success", message: "Token is valid", statusCode: 201 };
+  } catch (error) {
+    return {
+      status: "failed",
+      message: "Invalid token, access denied",
+      statusCode: 400,
+    };
+  }
+}
+
 const refreshToken =
   process.env.NEXT_PUBLIC_REFRESH_TOKEN_SECRET || "refresh123token";
 
