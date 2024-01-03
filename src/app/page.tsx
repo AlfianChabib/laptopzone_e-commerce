@@ -14,8 +14,7 @@ export default function Home(props: HomePropsType) {
     }
   }, [userAccess]);
   return (
-    <section>
-      <Navbar />
+    <section className="flex flex-col w-full h-[1000px]">
       Hallo {name ? "Ariel" : "Tamu"}
     </section>
   );
