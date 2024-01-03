@@ -13,13 +13,14 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { fetchPost } from "@/lib/fetch/user";
-import { useState } from "react";
+import { CSSProperties, useState } from "react";
 import { AuthResponse } from "@/types/frontend/auth/user";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { loginStore } from "@/store/auth";
 import { useRouter } from "next/navigation";
 import { AlertCircle } from "lucide-react";
 import { Spinner } from "@chakra-ui/react";
+import PropagateLoader from "react-spinners/PropagateLoader";
 
 const formSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email." }),
@@ -27,6 +28,11 @@ const formSchema = z.object({
     .string()
     .min(6, { message: "Password must be at least 6 characters." }),
 });
+
+const override: CSSProperties = {
+  display: "block",
+  paddingBottom: "1rem",
+};
 
 export default function SignInForm() {
   const [errorMsg, setErrorMsg] = useState<AuthResponse | null>(null);
@@ -112,7 +118,16 @@ export default function SignInForm() {
           } `}
           disabled={isLoading}
         >
-          {isLoading ? <Spinner /> : "Sign In"}
+          {isLoading ? (
+            <PropagateLoader
+              cssOverride={override}
+              color="rgb(15, 23, 42)"
+              aria-label="Loading Spinner"
+              data-testid="loader"
+            />
+          ) : (
+            "Sign In"
+          )}
         </Button>
       </form>
     </Form>
