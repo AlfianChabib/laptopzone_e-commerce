@@ -47,6 +47,7 @@ export default function Navbar() {
     setLoading(true);
     setUserAcces("");
     router.push("/auth/sign-in");
+    setLoading(false);
   }
   return (
     <nav className="flex sticky top-0 left-0 z-50 bg-slate-950 backdrop-filter backdrop-blur-sm bg-opacity-30 items-center justify-between w-full py-4 gap-2">
