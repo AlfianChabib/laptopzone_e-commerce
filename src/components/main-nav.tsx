@@ -26,18 +26,16 @@ import { useRouter } from "next/navigation";
 
 export default function Navbar() {
   const pathName = usePathname();
-  const { userAccess, setUserAcces } = loginStore();
+  const { userAccess, removeUserAccess } = loginStore();
   const router = useRouter();
-  const [isLogin, setIsLogin] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
-
-  useEffect(() => {
-    if (userAccess) {
-      setIsLogin(true);
-    }
-  }, [userAccess]);
+  const [isLogin, setIsLogin] = useState<boolean>(false);
 
   const authPathName = ["/auth/sign-in", "/auth/sign-up"];
+
+  useEffect(() => {
+    if (userAccess) setIsLogin(true);
+  }, [userAccess]);
 
   if (authPathName.includes(pathName)) {
     return null;
@@ -45,7 +43,7 @@ export default function Navbar() {
 
   function handleLogOut() {
     setLoading(true);
-    setUserAcces("");
+    removeUserAccess();
     router.push("/auth/sign-in");
     setLoading(false);
   }

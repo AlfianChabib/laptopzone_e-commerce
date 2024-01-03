@@ -25,3 +25,12 @@ export function setRefreshToken(payload: ParamToken) {
 
   return refresh;
 }
+
+export function getExpiresDate() {
+  const currentDate = new Date();
+  const sevenDaysLater = new Date(
+    currentDate.getTime() + 7 * 24 * 60 * 60 * 1000
+  );
+
+  return sevenDaysLater;
+}
