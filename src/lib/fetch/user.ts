@@ -5,10 +5,13 @@ import {
 } from "@/types/backend/auth/user";
 import { ProductsData } from "@/types/backend/user/userType";
 
-let url = "http://localhost:3000/api";
+type Url = string | undefined;
+
+let url: Url = "http://localhost:3000/api";
+let beUrl: Url = process.env.NEXT_PUBLIC_BE_URL;
 
 if (process.env.NODE_ENV !== "development") {
-  url = "https://laptopzone-six.vercel.app/api";
+  url = beUrl;
 }
 
 export async function fetchPost(
