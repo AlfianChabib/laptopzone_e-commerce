@@ -1,7 +1,9 @@
-export default function Home() {
+import Navbar from "@/components/main-nav";
+
+export default async function Home() {
   return (
-    <section>
-      <h1>hello</h1>
+    <section className="flex flex-col w-full h-[1000px]">
+      <Navbar />
     </section>
   );
 }

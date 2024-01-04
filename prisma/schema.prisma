@@ -1,0 +1,103 @@
+// schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("NEXT_PUBLIC_POSTGRES_PRISMA_URL") // uses connection pooling
+  directUrl = env("NEXT_PUBLIC_POSTGRES_URL_NON_POOLING") // uses a direct connection
+}
+
+// tabel Users
+model User {
+  id           Int            @id @default(autoincrement())
+  name         String
+  userName     String
+  password     String
+  email        String
+  refreshToken String
+  address      String?
+  telp         String?
+  picture      String?
+  // ... (Tambahkan kolom lain sesuai kebutuhan)
+  products     Product[]      @relation("ProductSellerId")
+  carts        CartItem[]
+  wishlists    WishlistItem[]
+  transactions Transaction[]
+  Seller       Seller[]
+}
+
+// tabel Products
+model Product {
+  id           Int               @id @default(autoincrement())
+  sellerId     Int
+  title        String
+  description  String
+  price        Float
+  image        String
+  brand        String
+  // stockQuantity Int
+  // ... (Tambahkan kolom lain sesuai kebutuhan)
+  seller       User              @relation("ProductSellerId", fields: [sellerId], references: [id])
+  cartItems    CartItem[]
+  wishlists    WishlistItem[]
+  transactions TransactionItem[]
+}
+
+model Brand {
+  id   Int    @id @default(autoincrement())
+  name String
+}
+
+model Seller {
+  id       Int  @id @default(autoincrement())
+  sellerId Int
+  user     User @relation(fields: [sellerId], references: [id])
+}
+
+// tabel CartItems
+model CartItem {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  productId Int
+  quantity  Int
+  dateAdded DateTime @default(now())
+  // ... (Tambahkan kolom lain sesuai kebutuhan)
+  user      User     @relation(fields: [userId], references: [id])
+  product   Product  @relation(fields: [productId], references: [id])
+}
+
+// tabel WishlistItems
+model WishlistItem {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  productId Int
+  dateAdded DateTime @default(now())
+  // ... (Tambahkan kolom lain sesuai kebutuhan)
+  user      User     @relation(fields: [userId], references: [id])
+  product   Product  @relation(fields: [productId], references: [id])
+}
+
+// tabel Transactions
+model Transaction {
+  id               Int               @id @default(autoincrement())
+  userId           Int
+  transactionDate  DateTime          @default(now())
+  totalAmount      Float
+  // ... (Tambahkan kolom lain sesuai kebutuhan)
+  user             User              @relation(fields: [userId], references: [id])
+  transactionItems TransactionItem[]
+}
+
+// tabel TransactionItems
+model TransactionItem {
+  id            Int         @id @default(autoincrement())
+  transactionId Int
+  productId     Int
+  quantity      Int
+  // ... (Tambahkan kolom lain sesuai kebutuhan)
+  transaction   Transaction @relation(fields: [transactionId], references: [id])
+  product       Product     @relation(fields: [productId], references: [id])
+}
