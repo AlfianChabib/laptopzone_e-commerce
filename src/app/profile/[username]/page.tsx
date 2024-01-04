@@ -4,21 +4,23 @@ import MainContent from "@/components/profie/MainContent";
 import { Tabs } from "@/components/ui/tabs";
 import Navbar from "@/components/main-nav";
 import { fetchGet } from "@/lib/fetch/user";
-import { cookies } from "next/headers";
-import { JwtPayload, decode } from "jsonwebtoken";
 
-const getUserData = async () => {
-  const token = cookies().get("user_access")?.value;
-  const decoded = decode(token as string);
-  const { id } = decoded as JwtPayload;
-  const response = await fetchGet(id).catch((error) => {
+const getUserData = async (slug: string) => {
+  const response = await fetchGet(slug).catch((error) => {
     throw new Error(error);
   });
   return response.data;
 };
 
-export default async function page() {
-  const dataUser = await getUserData();
+export default async function page({
+  params,
+}: {
+  params: { username: string };
+}) {
+  const username = params.username;
+  console.log(username);
+  const dataUser = await getUserData(username);
+
   return (
     <section className="flex flex-col min-h-screen w-full">
       <Navbar dataUser={dataUser} />

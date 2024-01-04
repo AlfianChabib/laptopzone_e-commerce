@@ -24,6 +24,7 @@ import {
   DropdownMenuSeparator,
 } from "./ui/dropdown-menu";
 import { NavbarProps } from "@/types/frontend/navbar";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 export default function Navbar(props: NavbarProps) {
   const { dataUser } = props;
@@ -32,7 +33,6 @@ export default function Navbar(props: NavbarProps) {
   const { userAccess, removeUserAccess } = loginStore();
   const [loading, setLoading] = useState<boolean>(false);
   const [isLogin, setIsLogin] = useState<boolean>(false);
-
   const authPathName = ["/auth/sign-in", "/auth/sign-up"];
 
   useEffect(() => {
@@ -42,6 +42,8 @@ export default function Navbar(props: NavbarProps) {
   if (authPathName.includes(pathName)) {
     return null;
   }
+
+  console.log(dataUser);
 
   function handleLogOut() {
     setLoading(true);
@@ -114,9 +116,39 @@ export default function Navbar(props: NavbarProps) {
             </NavigationMenuList>
           </NavigationMenu>
         ) : (
-          <Button variant={"outline"} onClick={handleLogOut} disabled={loading}>
-            Sign Out
-          </Button>
+          <NavigationMenu>
+            <NavigationMenuList>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild className="flex">
+                  <Button variant="secondary" className="h-12">
+                    <Avatar>
+                      <AvatarImage
+                        src={String(dataUser?.picture)}
+                        alt={dataUser?.name}
+                        width={32}
+                        height={32}
+                      />
+                      <AvatarFallback className="bg-slate-900">
+                        LZ
+                      </AvatarFallback>
+                    </Avatar>
+                    <span className="ml-2">{dataUser?.name}</span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56">
+                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>
+                    <Link href="/profile">Profile</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>Transaction</DropdownMenuItem>
+                  <DropdownMenuItem onClick={handleLogOut}>
+                    Sign Out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </NavigationMenuList>
+          </NavigationMenu>
         )}
       </div>
     </nav>

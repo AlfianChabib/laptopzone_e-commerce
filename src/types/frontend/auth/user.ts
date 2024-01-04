@@ -15,5 +15,5 @@ export interface DataUser {
   password?: string;
   address?: string | null;
   telp?: string | null;
-  picture?: string | null;
+  picture?: string | null | undefined;
 }
