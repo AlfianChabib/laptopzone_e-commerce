@@ -3,3 +3,11 @@ export type ParamToken = {
   email?: string;
   id?: number | null;
 };
+
+export type DataDecode = {
+  userName: string;
+  email: string;
+  iat: number;
+  exp: number;
+  id: number;
+};

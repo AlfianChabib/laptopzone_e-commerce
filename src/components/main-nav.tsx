@@ -35,8 +35,6 @@ export default function Navbar(props: NavbarProps) {
 
   const authPathName = ["/auth/sign-in", "/auth/sign-up"];
 
-  console.log(dataUser);
-
   useEffect(() => {
     if (userAccess) setIsLogin(true);
   }, [userAccess]);

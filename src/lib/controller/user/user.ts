@@ -1,5 +1,7 @@
 import { prisma } from "@/lib/prisma/client";
 import { TypeUserPut } from "@/types/backend/auth/user";
+import { ProductsData } from "@/types/backend/user/userType";
+import { getNameBrandByName } from "../brand/brand";
 
 export async function getAllUser() {
   try {
@@ -48,7 +50,7 @@ export async function editUserById(data: TypeUserPut, id: number) {
         data: {},
       };
     }
-    
+
     return {
       status: "failed",
       statusCode: 500,
@@ -84,6 +86,64 @@ export async function getOneUser(id: number) {
       message: "failed when get one data",
       user: null,
       status: "failed",
+    };
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
+export async function setUserSeller(idUser: number) {
+  try {
+    await prisma.seller.create({
+      data: {
+        sellerId: idUser,
+      },
+    });
+
+    return { status: "success", message: "", statusCode: 200 };
+  } catch (error) {
+    return {
+      status: "failed",
+      message: error || "Internal server error!",
+      statusCode: 500,
+    };
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
+export async function setProductsTable(data: ProductsData, id: number) {
+  try {
+    const responseBrand = await getNameBrandByName(data.brand);
+    if (responseBrand.status === "failed") {
+      return { ...responseBrand };
+    }
+    if (responseBrand.data) {
+      const idBrand = String(responseBrand.data);
+      const responseProducts = await prisma.product.create({
+        data: {
+          title: data.title,
+          description: data.description,
+          price: data.price,
+          image: data.image,
+          brand: idBrand,
+          sellerId: id,
+        },
+      });
+
+      return {
+        status: "success",
+        statusCode: 200,
+        message: "Success add products table",
+        data: responseProducts,
+      };
+    }
+  } catch (error) {
+    return {
+      status: "failed",
+      statusCode: 500,
+      message: error || "Internal server Error!",
+      data: {},
     };
   } finally {
     await prisma.$disconnect();

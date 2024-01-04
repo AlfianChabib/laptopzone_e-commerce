@@ -3,7 +3,7 @@ import {
   TypeUserPut,
   TypeUserSignUp,
 } from "@/types/backend/auth/user";
-import { DataUser } from "@/types/frontend/auth/user";
+import { ProductsData } from "@/types/backend/user/userType";
 const url = process.env.NEXT_PUBLIC_BE_URL;
 
 export async function fetchPost(
@@ -46,10 +46,35 @@ export async function fetchPut(
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${jwtToken}`,
+        Authorization: `Bearer ${jwtToken}`,
       },
       body: JSON.stringify(data),
     });
+    return await response.json();
+  } catch (error) {
+    return {
+      status: "failed",
+      statusCode: 500,
+      message: error || "Internal server error!",
+    };
+  }
+}
+
+export async function fetchPostProductsTable(
+  data: ProductsData,
+  id: string,
+  token: string
+) {
+  try {
+    const response = await fetch(url + `/users?id=${id}&seller=true`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(data),
+    });
+
     return await response.json();
   } catch (error) {
     return {

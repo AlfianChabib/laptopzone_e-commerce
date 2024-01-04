@@ -1,4 +1,4 @@
-import { ParamToken } from "@/types/backend/token";
+import { DataDecode, ParamToken } from "@/types/backend/token";
 import jwt from "jsonwebtoken";
 
 const secretToken =
@@ -15,13 +15,19 @@ export function setAccessToken(payload: ParamToken) {
 
 export function getAccessToken(token: string) {
   try {
-    const decoded = jwt.verify(token, secretToken);
-    return { status: "success", message: "Token is valid", statusCode: 201 };
+    const decoded: DataDecode = jwt.verify(token, secretToken) as DataDecode;
+    return {
+      status: "success",
+      message: "Token is valid",
+      statusCode: 201,
+      data: decoded,
+    };
   } catch (error) {
     return {
       status: "failed",
       message: "Invalid token, access denied",
       statusCode: 400,
+      data: null,
     };
   }
 }
