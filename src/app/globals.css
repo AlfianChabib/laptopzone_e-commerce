@@ -73,7 +73,7 @@
   body {
     @apply bg-background text-foreground;
   }
-  section {
-    min-height: calc(100vh - 5rem);
-  }
+}
+.with-navbar {
+  min-height: calc(100vh - 5rem);
 }

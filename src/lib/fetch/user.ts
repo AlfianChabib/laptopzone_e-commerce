@@ -4,7 +4,8 @@ import {
   TypeUserSignUp,
 } from "@/types/backend/auth/user";
 import { ProductsData } from "@/types/backend/user/userType";
-const url = process.env.NEXT_PUBLIC_BE_URL;
+
+const url = process.env.NEXT_PUBLIC_BE_URL || "http://localhost:3000/api";
 
 export async function fetchPost(
   data: TypeUserSignUp | TypeUserLogin,

@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import { Avatar } from "@/components/ui/avatar";
 import { AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { Card, CardTitle, CardDescription } from "@/components/ui/card";
@@ -25,9 +25,9 @@ export default function Sidebar() {
 
   return (
     <div
-      className={`lg:flex lg:relative absolute bg-background lg:-translate-x-0 ${
+      className={`lg:flex lg:relative absolute bg-background lg:-translate-x-0 ease-in transition-all flex-col lg:w-[500px] max-w-[500px] min-h-full p-4 gap-4 border rounded-md justify-between ${
         isOpen ? "-translate-x-0" : "-translate-x-[330px]"
-      } ease-in transition-all flex-col lg:w-[500px] max-w-[500px] h-full p-4 gap-4 border rounded-md justify-between`}
+      } `}
     >
       <Button
         onClick={handleOpenSidebar}
@@ -38,7 +38,7 @@ export default function Sidebar() {
       >
         {isOpen ? <PanelRightOpen /> : <PanelLeftOpen />}
       </Button>
-      <div className="flex flex-col h-full justify-between">
+      <div className="flex flex-col with-navbar justify-between">
         <div className="flex flex-col gap-4 w-full">
           <Card className="overflow-hidden">
             <div className="flex gap-4 p-2">

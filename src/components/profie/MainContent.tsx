@@ -3,8 +3,8 @@ import { TabsContent } from "../ui/tabs";
 
 export default function MainContent() {
   return (
-    <div className="flex h-full w-full p-4 border rounded-md">
-      <TabsContent value="profile">
+    <div className="flex with-navbar w-full p-4 border rounded-md">
+      <TabsContent value="profile" className="w-full h-full">
         <h1 className="text-3xl">Profile</h1>
       </TabsContent>
       <TabsContent value="products">
