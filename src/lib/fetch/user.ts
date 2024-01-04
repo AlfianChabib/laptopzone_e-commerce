@@ -5,7 +5,11 @@ import {
 } from "@/types/backend/auth/user";
 import { ProductsData } from "@/types/backend/user/userType";
 
-let url = process.env.NEXT_PUBLIC_BE_URL || "http://localhost:3000/api";
+let url = "http://localhost:3000/api";
+
+if (process.env.NODE_ENV !== "development") {
+  url = "https://laptopzone-six.vercel.app/api";
+}
 
 export async function fetchPost(
   data: TypeUserSignUp | TypeUserLogin,
