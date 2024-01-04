@@ -19,3 +19,37 @@ export async function setNameBrand(data: NameBrand[]) {
     await prisma.$disconnect();
   }
 }
+
+export async function getNameBrandByName(name: string) {
+  try {
+    const data = await prisma.brand.findFirst({
+      where: {
+        name,
+      },
+    });
+    if (!data) {
+      return {
+        status: "failed",
+        statusCode: 404,
+        message: "Cannot find id",
+        data: null,
+      };
+    }
+
+    return {
+      status: "success",
+      statusCode: 404,
+      message: "Success get one id brand",
+      data: data.id,
+    };
+  } catch (error) {
+    return {
+      status: "failed",
+      statusCode: 500,
+      message: error || "Internal server Error!",
+      data: null
+    };
+  } finally {
+    await prisma.$disconnect();
+  }
+}
