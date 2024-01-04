@@ -34,5 +34,4 @@ export type TypeUserPut = {
   address: string;
   telp: string;
   picture: string;
-  token?: string;
 };
