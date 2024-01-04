@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Inter as FontSans } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/theme-provider";
-import Navbar from "@/components/main-nav";
 import "./globals.css";
 
 export const fontSans = FontSans({
@@ -35,7 +34,6 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <main className="flex flex-col max-w-7xl mx-auto px-2 min-h-screen relative">
-            <Navbar />
             {children}
           </main>
         </ThemeProvider>
