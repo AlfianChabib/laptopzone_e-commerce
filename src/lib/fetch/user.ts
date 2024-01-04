@@ -1,6 +1,6 @@
 import { TypeUserLogin, TypeUserSignUp } from "@/types/backend/auth/user";
 
-const url = process.env.NEXT_PUBLIC_BE_URL || "http://localhost:3000/api";
+let url = process.env.NEXT_PUBLIC_BE_URL || "http://localhost:3000/api";
 
 export async function fetchPost(
   data: TypeUserSignUp | TypeUserLogin,
@@ -9,8 +9,10 @@ export async function fetchPost(
   try {
     const dataUser = await fetch(url + `/auth/${auth}`, {
       method: "POST",
+      mode: "no-cors",
       headers: {
         "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
       },
       body: JSON.stringify(data),
     });
