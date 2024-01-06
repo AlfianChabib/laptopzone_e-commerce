@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma/client";
+import prisma from "@/lib/prisma/client";
 import { NameBrand } from "@/types/backend/brand/brand";
 
 export async function setNameBrand(data: NameBrand[]) {
@@ -47,7 +47,7 @@ export async function getNameBrandByName(name: string) {
       status: "failed",
       statusCode: 500,
       message: error || "Internal server Error!",
-      data: null
+      data: null,
     };
   } finally {
     await prisma.$disconnect();

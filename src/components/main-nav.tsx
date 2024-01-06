@@ -7,9 +7,9 @@ import { Separator } from "./ui/separator";
 import { Badge } from "./ui/badge";
 import { Bookmark, ShoppingCart } from "lucide-react";
 import { SlidersHorizontal } from "lucide-react";
-import { usePathname } from "next/navigation";
-import { loginStore } from "@/store/auth";
-import { useRouter } from "next/navigation";
+import { NavbarProps } from "@/types/frontend/navbar";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { signOut } from "next-auth/react";
 import {
   NavigationMenu,
   NavigationMenuItem,
@@ -23,34 +23,26 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
 } from "./ui/dropdown-menu";
-import { NavbarProps } from "@/types/frontend/navbar";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 export default function Navbar(props: NavbarProps) {
   const { dataUser } = props;
-  const router = useRouter();
-  const pathName = usePathname();
-  const { userAccess, removeUserAccess } = loginStore();
   const [loading, setLoading] = useState<boolean>(false);
   const [isLogin, setIsLogin] = useState<boolean>(false);
-  const authPathName = ["/auth/sign-in", "/auth/sign-up"];
 
   useEffect(() => {
-    if (userAccess) setIsLogin(true);
-  }, [userAccess]);
-
-  if (authPathName.includes(pathName)) {
-    return null;
-  }
-
-  console.log(dataUser);
+    if (dataUser !== undefined) {
+      setIsLogin(true);
+    } else {
+      setIsLogin(false);
+    }
+  }, [dataUser]);
 
   function handleLogOut() {
     setLoading(true);
-    removeUserAccess();
-    router.push("/auth/sign-in");
+    signOut();
     setLoading(false);
   }
+
   return (
     <nav className="flex sticky top-0 left-0 z-50 bg-slate-950 backdrop-filter backdrop-blur-sm bg-opacity-30 items-center justify-between w-full py-4 gap-2">
       <div className="md:flex hidden">
@@ -107,10 +99,10 @@ export default function Navbar(props: NavbarProps) {
         {!isLogin ? (
           <NavigationMenu>
             <NavigationMenuList className="gap-1">
-              <Link href="/auth/sign-in">
+              <Link href="/auth/signin">
                 <Button variant={"outline"}>Sign In</Button>
               </Link>
-              <Link href="/auth/sign-up">
+              <Link href="/auth/signup">
                 <Button>Sign Up</Button>
               </Link>
             </NavigationMenuList>

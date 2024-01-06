@@ -30,7 +30,7 @@ export async function fetchPost(
     });
 
     const response = await dataUser.json();
-    return response;
+    return response.data;
   } catch (error) {
     throw new Error("Failed POST data, server error");
   }

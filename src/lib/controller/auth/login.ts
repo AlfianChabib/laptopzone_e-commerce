@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma/client";
+import prisma from "@/lib/prisma/client";
 import { FuncLoginUser, TypeUserLogin } from "@/types/backend/auth/user";
 import validator from "validator";
 import { comparePass } from "../password";

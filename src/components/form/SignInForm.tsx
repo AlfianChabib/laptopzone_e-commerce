@@ -1,7 +1,4 @@
 "use client";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
 import {
   Form,
   FormControl,
@@ -10,17 +7,17 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import * as z from "zod";
+import { CSSProperties, useState } from "react";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { fetchPost } from "@/lib/fetch/user";
-import { CSSProperties, useState } from "react";
-import { AuthResponse } from "@/types/frontend/auth/user";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { loginStore } from "@/store/auth";
-import { useRouter } from "next/navigation";
 import { AlertCircle } from "lucide-react";
-import { Spinner } from "@chakra-ui/react";
 import PropagateLoader from "react-spinners/PropagateLoader";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 const formSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email." }),
@@ -35,10 +32,9 @@ const override: CSSProperties = {
 };
 
 export default function SignInForm() {
-  const [errorMsg, setErrorMsg] = useState<AuthResponse | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const { setUserAcces } = loginStore();
   const router = useRouter();
+  const [errorMsg, setErrorMsg] = useState<any | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -47,37 +43,31 @@ export default function SignInForm() {
     },
   });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function submitForm(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
     try {
-      const response = await fetchPost(values, "login");
+      const signInResponse = await signIn("credentials", {
+        email: values.email,
+        password: values.password,
+        redirect: false,
+      });
 
-      if (response.status === "failed") {
+      if (!signInResponse || signInResponse.ok !== true) {
+        setErrorMsg("Please enter a valid email and password.");
+      } else {
+        router.push("/");
+        router.refresh();
         setIsLoading(false);
-        setErrorMsg(response);
-        return;
+        form.reset();
       }
-
-      setIsLoading(false);
-      setErrorMsg(null);
-      setUserAcces(response.accessToken);
-      router.push("/");
-      form.reset();
-    } catch (error: any) {
-      setIsLoading(false);
-      const errorServer = {
-        status: "failed",
-        statusCode: 500,
-        message: "Oops Internal server Error",
-        accessToken: "",
-      };
-      setErrorMsg(errorServer);
+    } catch (error) {
+      setErrorMsg(error);
     }
   }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+      <form onSubmit={form.handleSubmit(submitForm)} className="space-y-4">
         {errorMsg ? (
           <Alert variant="destructive">
             <AlertCircle className="h-4 w-4" />
