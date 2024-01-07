@@ -1,11 +1,11 @@
 "use client";
-import React, { useState } from "react";
+import { useState } from "react";
+import { Button } from "../ui/button";
 import { Avatar } from "@/components/ui/avatar";
-import { AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
-import { Card, CardTitle, CardDescription } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Button } from "../ui/button";
+import { AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
+import { Card, CardTitle, CardDescription } from "@/components/ui/card";
 import {
   Bookmark,
   Package,
@@ -71,7 +71,11 @@ export default function Sidebar() {
           <div className="flex items-center justify-center border rounded-md">
             <div defaultValue="profile" className="w-full p-1">
               <TabsList className="flex-col w-full h-full gap-2">
-                <TabsTrigger className="w-full justify-between" value="profile">
+                <TabsTrigger
+                  className="w-full justify-between"
+                  value="profile"
+                  onClick={handleOpenSidebar}
+                >
                   <p>Profile</p>
                   <User size={18} />
                 </TabsTrigger>
@@ -79,12 +83,17 @@ export default function Sidebar() {
                 <TabsTrigger
                   className="w-full justify-between"
                   value="products"
+                  onClick={handleOpenSidebar}
                 >
                   <p>Products</p>
                   <Package size={18} />
                 </TabsTrigger>
                 <Separator />
-                <TabsTrigger className="w-full justify-between" value="carts">
+                <TabsTrigger
+                  className="w-full justify-between"
+                  value="carts"
+                  onClick={handleOpenSidebar}
+                >
                   <p>Carts</p>
                   <ShoppingCart size={18} />
                 </TabsTrigger>
@@ -92,6 +101,7 @@ export default function Sidebar() {
                 <TabsTrigger
                   className="w-full justify-between"
                   value="wishlists"
+                  onClick={handleOpenSidebar}
                 >
                   <p>Wishlists</p>
                   <Bookmark size={18} />
@@ -104,6 +114,7 @@ export default function Sidebar() {
           <TabsTrigger
             value="createProduct"
             className="flex w-full h-full gap-2"
+            onClick={handleOpenSidebar}
           >
             <PackagePlus />
             <p className="text-xl">Create Product</p>

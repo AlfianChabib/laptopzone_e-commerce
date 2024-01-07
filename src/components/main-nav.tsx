@@ -25,17 +25,23 @@ import {
 } from "./ui/dropdown-menu";
 
 export default function Navbar(props: NavbarProps) {
-  const { dataUser } = props;
+  const { sessionData } = props;
   const [loading, setLoading] = useState<boolean>(false);
   const [isLogin, setIsLogin] = useState<boolean>(false);
 
   useEffect(() => {
-    if (dataUser !== undefined) {
+    if (!!sessionData) {
       setIsLogin(true);
     } else {
       setIsLogin(false);
     }
-  }, [dataUser]);
+  }, [sessionData]);
+
+  const avatarFallback: string | undefined = sessionData?.name
+    ?.split(" ")
+    .map((name) => name[0])
+    .join("")
+    .substring(0, 2);
 
   function handleLogOut() {
     setLoading(true);
@@ -46,13 +52,15 @@ export default function Navbar(props: NavbarProps) {
   return (
     <nav className="flex sticky top-0 left-0 z-50 bg-slate-950 backdrop-filter backdrop-blur-sm bg-opacity-30 items-center justify-between w-full py-4 gap-2">
       <div className="md:flex hidden">
-        <h1 className="text-lg">LaptopZone</h1>
+        <Link href={"/"}>
+          <h1 className="text-lg">LaptopZone</h1>
+        </Link>
       </div>
       <NavigationMenu>
         <NavigationMenuList>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline">
+              <Button variant="outline" className="w-10 p-0">
                 <SlidersHorizontal />
               </Button>
             </DropdownMenuTrigger>
@@ -72,30 +80,30 @@ export default function Navbar(props: NavbarProps) {
         type="search"
         className="focus-visible:ring-1 focus-visible:ring-offset-0 focus-visible:ring-slate-700"
       />
-      <Separator orientation="vertical" className="h-7" decorative />
-      <NavigationMenu>
-        <NavigationMenuList>
-          <NavigationMenuItem>
-            <Button variant="outline" className="relative">
-              <Badge className="absolute leading-6 px-1 h-4 -right-1 -top-2">
-                11
-              </Badge>
-              <Bookmark />
-            </Button>
-          </NavigationMenuItem>
-          <NavigationMenuItem>
-            <Button variant="outline" className="relative">
-              <Badge className="absolute leading-6 px-1 h-4 -right-1 -top-2">
-                11
-              </Badge>
-              <ShoppingCart />
-            </Button>
-          </NavigationMenuItem>
-        </NavigationMenuList>
-      </NavigationMenu>
+      {isLogin && (
+        <NavigationMenu>
+          <NavigationMenuList>
+            <NavigationMenuItem>
+              <Button variant="outline" className="relative">
+                <Badge className="absolute leading-6 px-1 h-4 -right-1 -top-2">
+                  11
+                </Badge>
+                <Bookmark />
+              </Button>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <Button variant="outline" className="relative">
+                <Badge className="absolute leading-6 px-1 h-4 -right-1 -top-2">
+                  11
+                </Badge>
+                <ShoppingCart />
+              </Button>
+            </NavigationMenuItem>
+          </NavigationMenuList>
+        </NavigationMenu>
+      )}
 
-      <Separator orientation="vertical" className="h-7" decorative />
-      <div className="md:flex hidden items-center ">
+      <div className="flex items-center ">
         {!isLogin ? (
           <NavigationMenu>
             <NavigationMenuList className="gap-1">
@@ -112,26 +120,30 @@ export default function Navbar(props: NavbarProps) {
             <NavigationMenuList>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild className="flex">
-                  <Button variant="secondary" className="h-12">
-                    <Avatar>
+                  <Button variant="secondary" className="md:w-full w-10 px-2">
+                    <Avatar className="w-9 h-9">
                       <AvatarImage
-                        src={String(dataUser?.picture)}
-                        alt={dataUser?.name}
+                        src={String(sessionData?.picture)}
+                        alt={sessionData?.name}
                         width={32}
                         height={32}
                       />
                       <AvatarFallback className="bg-slate-900">
-                        LZ
+                        {avatarFallback}
                       </AvatarFallback>
                     </Avatar>
-                    <span className="ml-2">{dataUser?.name}</span>
+                    <span className="ml-2 md:flex hidden">
+                      {sessionData?.name}
+                    </span>
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-56">
+                <DropdownMenuContent className="w-56 mr-2">
                   <DropdownMenuLabel>My Account</DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem>
-                    <Link href="/profile">Profile</Link>
+                    <Link className="w-full" href={"/profile"}>
+                      Profile
+                    </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem>Transaction</DropdownMenuItem>
                   <DropdownMenuItem onClick={handleLogOut}>

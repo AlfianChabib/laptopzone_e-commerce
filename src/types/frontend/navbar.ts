@@ -1,5 +1,5 @@
-import { DataUser } from "./auth/user";
+import { SessionData } from "./auth/user";
 
 export type NavbarProps = {
-  dataUser?: DataUser | undefined | null;
+  sessionData?: SessionData | undefined | null;
 };
