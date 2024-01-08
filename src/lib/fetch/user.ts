@@ -106,3 +106,32 @@ export async function fetchPostProductsTable(
     };
   }
 }
+
+export async function fetcPostCartTable(data: {
+  token: string;
+  qty: number;
+  productId: number;
+  userId: number;
+}) {
+  try {
+    const response = await fetch(
+      url + `/cart?productId=${data.productId}&userId=${data.userId}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${data.token}`,
+        },
+        body: JSON.stringify(data.qty),
+      }
+    );
+
+    return await response.json();
+  } catch (error) {
+    return {
+      status: "failed",
+      statusCode: 500,
+      message: error || "Internal server error!",
+    };
+  }
+}
