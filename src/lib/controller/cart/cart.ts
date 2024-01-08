@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma/client";
+import prisma from "@/lib/prisma/client";
 
 export async function setCartUser(data: {
   userId: number;
