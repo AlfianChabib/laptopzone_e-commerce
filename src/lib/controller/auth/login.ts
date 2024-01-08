@@ -1,8 +1,8 @@
-import { prisma } from "@/lib/prisma/client";
+import prisma from "@/lib/prisma/client";
 import { FuncLoginUser, TypeUserLogin } from "@/types/backend/auth/user";
 import validator from "validator";
 import { comparePass } from "../password";
-import { DataUser } from "@/types/frontend/auth/user";
+import { SessionData } from "@/types/frontend/auth/user";
 export function checkDataLogin(data: TypeUserLogin) {
   let validateEmail = validator.isEmail(data.email);
   if (!validateEmail) return { message: "Please fill email properly" };
@@ -77,7 +77,10 @@ export async function LoginUser(data: TypeUserLogin): Promise<FuncLoginUser> {
   }
 }
 
-export async function UpdateUser(id: number | undefined, dataUpdate: DataUser) {
+export async function UpdateUser(
+  id: number | undefined,
+  dataUpdate: SessionData
+) {
   try {
     if (id) {
       await prisma.user.update({

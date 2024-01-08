@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma/client";
+import prisma from "@/lib/prisma/client";
 import { TypeUserPut } from "@/types/backend/auth/user";
 import { ProductsData } from "@/types/backend/user/userType";
 import { getNameBrandByName } from "../brand/brand";

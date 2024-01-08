@@ -6,12 +6,10 @@ import {
 import { ProductsData } from "@/types/backend/user/userType";
 
 type Url = string | undefined;
-
 let url: Url = "http://localhost:3000/api";
-let beUrl: Url = process.env.NEXT_PUBLIC_BE_URL;
-
+let apiUrl: Url = process.env.NEXT_PUBLIC_BE_URL;
 if (process.env.NODE_ENV !== "development") {
-  url = beUrl;
+  url = apiUrl;
 }
 
 export async function fetchPost(
@@ -30,19 +28,33 @@ export async function fetchPost(
     });
 
     const response = await dataUser.json();
-    return response;
+    return response.data;
   } catch (error) {
     throw new Error("Failed POST data, server error");
   }
 }
 
-export async function fetchGet(id?: string) {
+export async function dataUser(id: string | undefined) {
   try {
-    const param = id ? "?id=" + id : "";
-    const dataUser = await fetch(url + `/users${param}`);
-    return await dataUser.json();
+    const dataUser = await fetch(url + `/users?id=${id}`)
+      .then((response) => response.json())
+      .then((data) => data)
+      .catch((error) => console.log(error));
+    return dataUser.data;
   } catch (error) {
-    throw new Error("Failed get data, internal server Error!");
+    throw new Error("Failed get User data, internal server Error!");
+  }
+}
+
+export async function sessionData(id: string | undefined) {
+  try {
+    const sessionUser = await fetch(url + `/users?id=${id}`)
+      .then((response) => response.json())
+      .then((data) => data)
+      .catch((error) => console.log(error));
+    return sessionUser.data;
+  } catch (error) {
+    throw new Error("Failed get Session data, internal server Error!");
   }
 }
 

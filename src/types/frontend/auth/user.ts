@@ -2,11 +2,11 @@ export interface AuthResponse {
   status: string;
   statusCode: number;
   message: string;
-  data?: DataUser;
+  data?: SessionData;
   accessToken: string;
 }
 
-export interface DataUser {
+export interface SessionData {
   id?: number;
   name?: string;
   userName?: string;

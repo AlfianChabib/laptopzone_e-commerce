@@ -1,4 +1,4 @@
-import { DataUser } from "@/types/frontend/auth/user";
+import { SessionData } from "@/types/frontend/auth/user";
 
 export interface TypeUserSignUp {
   name: string;
@@ -25,7 +25,7 @@ export type FuncLoginUser = {
   status: string;
   message: string | {};
   statusCode: number;
-  data: DataUser;
+  data: SessionData;
 };
 
 export type TypeUserPut = {

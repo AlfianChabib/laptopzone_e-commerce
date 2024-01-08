@@ -1,4 +1,3 @@
-import { DataUser } from "@/types/frontend/auth/user";
 import { StateCreator, create } from "zustand";
 import { PersistOptions, createJSONStorage, persist } from "zustand/middleware";
 import Cookies from "js-cookie";
