@@ -149,3 +149,33 @@ export async function setProductsTable(data: ProductsData, id: number) {
     await prisma.$disconnect();
   }
 }
+
+export async function findProductById(id: number) {
+  try {
+    const product = await prisma.product.findFirst({ where: { id } });
+    if (!product) {
+      return {
+        status: "failed",
+        statusCode: 404,
+        message: "Cannot find any product",
+        data: null,
+      };
+    }
+
+    return {
+      status: "success",
+      statusCode: 200,
+      message: "Success find one product",
+      data: product,
+    };
+  } catch (error) {
+    return {
+      status: "failed",
+      statusCode: 500,
+      message: error || "Internal server error!",
+      data: null,
+    };
+  } finally {
+    await prisma.$disconnect();
+  }
+}
